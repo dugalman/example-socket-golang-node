@@ -4,6 +4,8 @@ import (
 	"encoding/binary"
 	"fmt"
 	"net"
+	"os"
+	"strconv"
 
 	"github.com/google/uuid"
 )
@@ -39,7 +41,7 @@ func main() {
 	processUUID := uuid.New()
 
 	// Definir el ID del proceso
-	processID := TProcessID(PROCESS_ID) // Por ejemplo, podría ser un ID específico para este proceso
+	processID := getProducerId()
 
 	// XMLs de ejemplo
 	xmls := []string{
@@ -104,4 +106,27 @@ func generateMessageToSend(dataBody TBody, processUUID uuid.UUID, processID TPro
 	}
 
 	return message
+}
+
+/** Definir el ID del proceso*/
+func getProducerId() TProcessID {
+
+	// Valor predeterminado
+	processID := TProcessID(PROCESS_ID)
+
+	// Obtener el ID de proceso de los argumentos de la línea de comandos
+	args := os.Args[1:]
+
+	fmt.Println("xxxxx", args)
+
+	if len(args) > 0 {
+		id, err := strconv.ParseUint(args[0], 10, 32)
+		if err != nil {
+			fmt.Println("Error: el ID de proceso no es un número válido. Usando valor predeterminado.")
+		} else {
+			processID = TProcessID(id)
+		}
+	}
+
+	return processID
 }
