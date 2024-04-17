@@ -21,7 +21,7 @@ func main() {
 		conn, err := ln.Accept()
 		if err != nil {
 			fmt.Println("Error al aceptar la conexión:", err)
-			return
+			continue // Continuar esperando conexiones
 		}
 		fmt.Println("Cliente conectado.")
 
@@ -56,7 +56,7 @@ func handleConnection(conn net.Conn) {
 			buf := make([]byte, toRead)
 			n, err := conn.Read(buf)
 
-			fmt.Printf("  bodySize %v, BUFFER_SIZE %v, toRead %v , n %v, remaining %v | %v \n", bodySize, BUFFER_SIZE, toRead, n, remaining, string(buf))
+			// fmt.Printf("    bodySize %v, BUFFER_SIZE %v, toRead %v , n %v, remaining %v | %v \n", bodySize, BUFFER_SIZE, toRead, n, remaining, string(buf))
 
 			if err != nil {
 				fmt.Println("Error al leer el cuerpo:", err)
@@ -67,7 +67,7 @@ func handleConnection(conn net.Conn) {
 
 		// Procesar el cuerpo (XML en este caso)
 		xmlData := string(body)
-		fmt.Println("XML recibido:", ciclo, xmlData)
+		fmt.Println("  XML recibido:", ciclo, xmlData)
 	}
 }
 
