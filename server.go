@@ -5,9 +5,24 @@ import (
 	"fmt"
 	"io"
 	"net"
+
+	"github.com/google/uuid"
 )
 
 const BUFFER_SIZE = 32
+
+type TipoHeader struct {
+	Size      uint16
+	Uuid      uuid.UUID
+	ProcessID uint32
+}
+
+type TipoBody []byte
+
+type TipoMensaje struct {
+	Header TipoHeader
+	Body   TipoBody
+}
 
 func main() {
 	ln, err := net.Listen("tcp", ":8080")
@@ -37,8 +52,11 @@ func handleConnection(conn net.Conn) {
 
 	for {
 		ciclo++
+
 		// Leer el encabezado
-		headerBuf := make([]byte, 2)
+		var header TipoHeader
+		headerSize := binary.Size(header)
+		headerBuf := make([]byte, headerSize)
 		_, err := conn.Read(headerBuf)
 		if err != nil {
 			if err != io.EOF {
@@ -47,30 +65,32 @@ func handleConnection(conn net.Conn) {
 			return
 		}
 
-		// bodySize := uint8(header[0])
-		bodySize := binary.BigEndian.Uint16(headerBuf)
+		// Desempaquetar el encabezado
+		header.Size = binary.BigEndian.Uint16(headerBuf[:2])
+		copy(header.Uuid[:], headerBuf[2:18])
+		header.ProcessID = binary.BigEndian.Uint32(headerBuf[18:])
 
 		// Leer el cuerpo en fragmentos del tamaño adecuado
 		var body []byte
-		for len(body) < int(bodySize) {
-			remaining := int(bodySize) - len(body)
+		for len(body) < int(header.Size) {
+			remaining := int(header.Size) - len(body)
 
 			toRead := min(remaining, BUFFER_SIZE)
 			buf := make([]byte, toRead)
 			n, err := conn.Read(buf)
-
-			// fmt.Printf("    bodySize %v, BUFFER_SIZE %v, toRead %v , n %v, remaining %v | %v \n", bodySize, BUFFER_SIZE, toRead, n, remaining, string(buf))
-
 			if err != nil {
 				fmt.Println("Error al leer el cuerpo:", err)
 				return
 			}
+
+			// fmt.Printf("    bodySize %v, BUFFER_SIZE %v, toRead %v , n %v, remaining %v | %v \n", bodySize, BUFFER_SIZE, toRead, n, remaining, string(buf))
+
 			body = append(body, buf[:n]...)
 		}
 
 		// Procesar el cuerpo (XML en este caso)
 		xmlData := string(body)
-		fmt.Println("  XML recibido:", ciclo, xmlData)
+		fmt.Println("  XML recibido:", header.ProcessID, header.Uuid, ciclo, xmlData)
 	}
 }
 
