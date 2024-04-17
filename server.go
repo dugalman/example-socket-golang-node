@@ -58,7 +58,7 @@ func handleConnection(conn net.Conn) {
 		buf := make([]byte, toRead)
 		n, err := conn.Read(buf)
 
-		fmt.Println("bodySize %v, remaining %v, BUFFER_SIZE %v, toRead %v", bodySize, remaining, BUFFER_SIZE, toRead)
+		fmt.Printf("bodySize %v, BUFFER_SIZE %v, toRead %v , n %v, remaining %v | %v \n", bodySize, BUFFER_SIZE, toRead, n, remaining, string(buf))
 
 		if err != nil {
 			fmt.Println("Error al leer el cuerpo:", err)

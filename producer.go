@@ -23,16 +23,8 @@ func main() {
 	// XML de ejemplo
 	xmlData := `<counter vltid="7805" date="2023/12/19 14:00:00" denom="1" ci="49842000" co="47216500" dr="14110376" jp="0" cc="11484876" hpcc="78831000" jj="53306" jg="29535" pa="352" pwr="19" cxb="11208000" tci="0" tco="0" hl="0" ca="0" ti="2902376" to="32653876" mpeb="0" apeb="0" app="0" mpp="0" tkiqty="48" tkoqty="2068" capr="0" state="0"/>`
 
-	// Convertir el XML a bytes en UTF-8
-	xmlBytes := []byte(xmlData)
-
-	// fmt.Printf("xxxxxx %d - %v \n", uint16(len(xmlData)), xmlBytes)
-
 	// Crear el mensaje con el tamaño del cuerpo
-	message := Message{
-		Header: uint16(len(xmlBytes)),
-		Body:   xmlData,
-	}
+	message := generateMessageToSend(xmlData)
 
 	fmt.Println("Enviando ", message.Header, message.Body)
 
@@ -56,4 +48,20 @@ func main() {
 	}
 
 	fmt.Println("Mensaje enviado correctamente.")
+}
+
+func generateMessageToSend(data string) Message {
+
+	// Convertir el XML a bytes en UTF-8
+	xmlBytes := []byte(data)
+
+	// fmt.Printf("xxxxxx %d - %v \n", uint16(len(data)), xmlBytes)
+
+	// Crear el mensaje con el tamaño del cuerpo
+	message := Message{
+		Header: uint16(len(xmlBytes)),
+		Body:   data,
+	}
+
+	return message
 }
