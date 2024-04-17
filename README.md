@@ -1,4 +1,4 @@
-# PAquetes quebrados
+# Paquetes quebrados
 
 Mi apliacion golang, abre un socket TCP, donde empiezo a recivir datos, estos "datos" estan formados por un header y un body. 
 
@@ -7,4 +7,5 @@ Mi apliacion golang, abre un socket TCP, donde empiezo a recivir datos, estos "d
 
 Pero en read del socket a veces el read me queda chico. Ejemplo el buffer de read es de 512bytes, pero me llega un campo h que llega 1024 bytes entonces tengo que hacer varios read para leer todo el body, 
 
-¿ podrias darme un ejemplo de como leer sin que se trunque el xml?
+El archivo `server.go` abre un puerto 8080 y espera paquetes que tienen un header y body
+

@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/binary"
 	"fmt"
+	"io"
 	"net"
 )
 
@@ -40,7 +41,9 @@ func handleConnection(conn net.Conn) {
 		headerBuf := make([]byte, 2)
 		_, err := conn.Read(headerBuf)
 		if err != nil {
-			fmt.Println("Error al leer el encabezado:", err)
+			if err != io.EOF {
+				fmt.Println("Error al leer el encabezado:", err)
+			}
 			return
 		}
 

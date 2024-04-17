@@ -35,10 +35,7 @@ func main() {
 		fmt.Println("Enviando ", message.Header, message.Body)
 
 		// Convertir el tamaño del cuerpo a bytes y enviarlo como header
-
-		// headerBuf := make([]byte, 1)
 		headerBuf := make([]byte, 2)
-		// headerBuf[0] = message.Header
 		binary.BigEndian.PutUint16(headerBuf, message.Header)
 		_, err = conn.Write(headerBuf)
 		if err != nil {
@@ -55,7 +52,6 @@ func main() {
 
 		fmt.Println("Mensaje enviado correctamente.")
 	}
-
 }
 
 func generateMessageToSend(data string) Message {
