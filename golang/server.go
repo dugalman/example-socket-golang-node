@@ -83,7 +83,7 @@ func handleConnection(conn net.Conn) {
 				return
 			}
 
-			fmt.Printf("    bodySize %v, BUFFER_SIZE %v, toRead %v , n %v, remaining %v | %v \n", len(body), BUFFER_SIZE, toRead, n, remaining, string(buf))
+			fmt.Printf("    bodySize % 4d, BUFFER_SIZE % 4d, toRead % 4d, n % 4d, remaining % 4d | %v \n", len(body), BUFFER_SIZE, toRead, n, remaining, string(buf))
 
 			body = append(body, buf[:n]...)
 		}
