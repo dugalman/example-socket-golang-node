@@ -81,3 +81,18 @@ Enviando Body              <counter vltid="7807" date="2024/12/20 16:00:00" deno
 Mensaje enviado correctamente.
 ```
 
+## PROYECTO EN NODE
+
+En la carpeta node, se encuentra los archivos golang migrados a node con typescript, 
+
+- Para ejecutar el serser usar `node run server`
+- Para ejecutar el producer usar `node run producer 1234`
+
+LOS ARCHIVOS NODE SON INTERCAMBIABLES CON LOS DE GOLANG
+
+
+## LINKS
+
+- https://medium.com/@alejodev95/gu%C3%ADa-completa-para-configurar-y-dominar-typescript-proyecto-desde-cero-6523248a9c5d
+- [inicializar proyecto TS](https://github.com/matiasjaliff/node-typescript-setup)
+- [Proyectos en Node.js + TypeScript: setup completo y conciso](https://medium.com/@matiasjaliff/proyectos-en-node-js-typescript-setup-completo-y-conciso-8acdc6abff2c)
