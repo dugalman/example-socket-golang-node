@@ -13,6 +13,58 @@ Pero en read del socket a veces el read me queda chico. Ejemplo el buffer de rea
 El archivo `server.go` abre un puerto 8080 y espera paquetes que tienen un header y body
 
 
+hay que tener precausiones con solos socket. puede ocurrir que hacer 4 write desde el lado del productor, pero te llega un solo paquete con todos los mensajes
+- HAY QUE CONTEMPLAR LOS CASOS DE 1 RECIVE CON VARIOS PAQUETES
+- HAY QUE CONTEMPLAR LOS CASOS DE 1 RECIVE CON VARIOS PAQUETES INCOMPLETOS
+
+## HAY QUE CONTEMPLAR LOS CASOS DE 1 RECIVE CON VARIOS PAQUETES
+
+Suponiendo que el header siempre ocupara 22 bytes y el body es dinamico
+
+En una prueba que envio 8 paquetes y recibe 3, contodos los bytes. Se muestran los bytes envidos y recibido
+
+  |  enviado | recibiddo |     TOTAL |
+  | -------: | --------: | --------: |
+  |       22 |       352 |
+  |      330 |       461 |
+  |       22 |       226 |
+  |      213 |           |
+  |       22 |           |
+  |      204 |           |
+  |       22 |           |
+  |      204 |           |
+  | **1039** |  **1039** | **TOTAL** |
+
+Pero en otra ejecucion del los mismos 8 y recivo 6 paquetes
+
+  |  enviado | recibiddo |     TOTAL |
+  | -------: | --------: | --------: |
+  |       22 |        22 |
+  |      330 |       330 |
+  |       22 |       235 |
+  |      213 |       226 |
+  |       22 |        22 |
+  |      204 |       204 |
+  |       22 |           |
+  |      204 |           |
+  | **1039** |  **1039** | **TOTAL** |
+
+Y en otra envio 8 y recivo 2 paquetes
+
+  |  enviado | recibiddo |     TOTAL |
+  | -------: | --------: | --------: |
+  |       22 |        22 |
+  |      330 |      1017 |
+  |       22 |           |
+  |      213 |           |
+  |       22 |           |
+  |      204 |           |
+  |       22 |           |
+  |      204 |           |
+  | **1039** |  **1039** | **TOTAL** |
+
+
+
 ## Como usar el sistema
 
 1. Arrancar el servidor con `go run ./server.go`, se tiene que ver el mensaje **"Servidor TCP iniciado. Esperando conexiones..."**
@@ -89,6 +141,7 @@ En la carpeta node, se encuentra los archivos golang migrados a node con typescr
 - Para ejecutar el producer usar `node run producer 1234`
 
 LOS ARCHIVOS NODE SON INTERCAMBIABLES CON LOS DE GOLANG
+
 
 
 ## LINKS

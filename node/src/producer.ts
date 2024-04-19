@@ -30,15 +30,22 @@ function main() {
     console.log('Cliente conectado.');
 
     const xmlDataList = [
-      `<counter vltid="7805" date="2023/12/19 14:00:00" denom="1" ci="49842000" co="47216500" dr="14110376" jp="0" cc="11484876" hpcc="78831000" jj="53306" jg="29535" pa="352" pwr="19" cxb="11208000" tci="0" tco="0" hl="0" ca="0" ti="2902376" to="32653876" mpeb="0" apeb="0" app="0" mpp="0" tkiqty="48" tkoqty="2068" capr="0" state="0"/>`,
+      `<counter vltid="7801" date="2023/12/19 14:00:00" denom="1" ci="49842000" co="47216500" dr="14110376" jp="0" cc="11484876" hpcc="78831000" jj="53306" jg="29535" pa="352" pwr="19" cxb="11208000" tci="0" tco="0" hl="0" ca="0" ti="2902376" to="32653876" mpeb="0" apeb="0" app="0" mpp="0" tkiqty="48" tkoqty="2068" capr="0" state="0"/>`,
       // Agrega más XML aquí si es necesario
-      `<counter vltid="7806" date="2024/12/19 15:00:00" denom="1" ci="49842001" co="47216501" dr="14110377" jp="0" jj="53307" to="32653877" mpeb="1" apeb="1" app="1" mpp="1" tkiqty="49" tkoqty="2069" capr="1" state="1"/>`,
-      `<counter vltid="7807" date="2024/12/20 16:00:00" denom="1" ci="49842001" co="47216501" dr="14110377" jp="0" jj="53307" to="32653877" apeb="1" app="1" mpp="1" tkiqty="49" tkoqty="2069" capr="1" state="1"/>`,
+      `<counter vltid="7802" date="2024/12/19 15:00:00" denom="1" ci="49842001" co="47216501" dr="14110377" jp="0" jj="53307" to="32653877" mpeb="1" apeb="1" app="1" mpp="1" tkiqty="49" tkoqty="2069" capr="1" state="1"/>`,
+      `<counter vltid="7803" date="2024/12/20 16:00:00" denom="1" ci="49842001" co="47216501" dr="14110377" jp="0" jj="53307" to="32653877" apeb="1" app="1" mpp="1" tkiqty="49" tkoqty="2069" capr="1" state="1"/>`,
+      `<counter vltid="7804" date="2024/12/20 16:00:00" denom="1" ci="49842001" co="47216501" dr="14110377" jp="0" jj="53307" to="32653877" apeb="1" app="1" mpp="1" tkiqty="49" tkoqty="2069" capr="1" state="1"/>`,
+      // `<counter vltid="7805" date="2024/12/20 16:00:00" denom="1" ci="49842001" co="47216501" dr="14110377" jp="0" jj="53307" to="32653877" apeb="1" app="1" mpp="1" tkiqty="49" tkoqty="2069" capr="1" state="1"/>`,
+      // `<counter vltid="7806" date="2024/12/20 16:00:00" denom="1" ci="49842001" co="47216501" dr="14110377" jp="0" jj="53307" to="32653877" apeb="1" app="1" mpp="1" tkiqty="49" tkoqty="2069" capr="1" state="1"/>`,
+      // `<counter vltid="7807" date="2024/12/20 16:00:00" denom="1" ci="49842001" co="47216501" dr="14110377" jp="0" jj="53307" to="32653877" apeb="1" app="1" mpp="1" tkiqty="49" tkoqty="2069" capr="1" state="1"/>`,
     ];
 
     xmlDataList.forEach((xmlData) => {
+      console.log('body', xmlData)
       sendXML(xmlData, processID, conn);
     });
+
+    conn.end()
   });
 }
 
@@ -61,11 +68,18 @@ const sendXML = (xmlData: string, processID: number, conn: net.Socket) => {
   Buffer.from(message.header.uuid, 'utf-8').copy(headerBuf, 2);
   headerBuf.writeUInt32BE(message.header.processID, 18);
 
-  console.log('HEADER', headerBuf);
-  console.log('BODY', xmlBytes);
+  console.log('HEADER', headerBuf.length  ,  buffer2string(headerBuf));
+  console.log('BODY', xmlBytes.length, buffer2string(xmlBytes));
 
   conn.write(headerBuf);
   conn.write(xmlBytes);
   console.log('Mensaje enviado correctamente.');
 }
 
+
+
+const buffer2string = (buffer: Buffer): string => {
+  const bytes = buffer.toJSON().data;
+  const byteStrings = bytes.map(byte => byte.toString(16).padStart(2, '0').toLocaleUpperCase());
+  return `[${byteStrings.join(' ')}]`;
+}
