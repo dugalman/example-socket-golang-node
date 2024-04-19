@@ -1,17 +1,21 @@
 {
-  "name": "paquetes-quebrados",
+  "name": "node",
   "version": "1.0.0",
   "description": "",
-  "main": "dist/app.js",
+  "main": "index.js",
   "scripts": {
-    "start": "tsc && node dist/app.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "server": "npx ts-node ./src/server.ts",
+    "producer": "npx ts-node ./src/producer.ts"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "tslint": "^5.12.1",
-    "typescript": "^3.3.3"
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.5"
+  },
+  "dependencies": {
+    "@types/uuid": "^9.0.8"
   }
 }
