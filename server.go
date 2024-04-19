@@ -83,14 +83,16 @@ func handleConnection(conn net.Conn) {
 				return
 			}
 
-			// fmt.Printf("    bodySize %v, BUFFER_SIZE %v, toRead %v , n %v, remaining %v | %v \n", bodySize, BUFFER_SIZE, toRead, n, remaining, string(buf))
+			fmt.Printf("    bodySize %v, BUFFER_SIZE %v, toRead %v , n %v, remaining %v | %v \n", len(body), BUFFER_SIZE, toRead, n, remaining, string(buf))
 
 			body = append(body, buf[:n]...)
 		}
 
 		// Procesar el cuerpo (XML en este caso)
 		xmlData := string(body)
-		fmt.Println("  XML recibido:", header.ProcessID, header.Uuid, ciclo, xmlData)
+		// fmt.Println("  XML recibido:", header.ProcessID, header.Uuid, ciclo, xmlData)
+		fmt.Println("  XML header:", header)
+		fmt.Println("  XML recibido:", xmlData)
 	}
 }
 
