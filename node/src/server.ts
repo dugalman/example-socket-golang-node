@@ -1,5 +1,10 @@
 import net from 'net';
 
+
+import { FileManager } from './file-manager'
+import path from 'path';
+const SERVER_PATH_LOG = path.join(__dirname, '../logs', 'server.log')
+
 interface MessageType {
   header: {
     size: number;
@@ -48,6 +53,8 @@ main();
 
 function handlerData(headerBuf: Buffer | null, data: Buffer, bodyBuf: Buffer | null, conn: net.Socket) {
 
+  const manager = new FileManager(SERVER_PATH_LOG);
+
   // TRATO DE RECUPERAR EL HEADER DEL PRIMER PAQUETE
   if (!headerBuf) {
     if (data.length >= 22) {
@@ -72,7 +79,9 @@ function handlerData(headerBuf: Buffer | null, data: Buffer, bodyBuf: Buffer | n
 
     if (bodyBuf.length >= header.size) {
       const xmlData = bodyBuf.toString('utf-8', 0, header.size);
-      console.log(`XML recibido (UUID: ${header.uuid}, ProcessID: ${header.processID}):`, xmlData);
+      console.log(`XML recibido (UUID: ${header.uuid}, ProcessID: ${header.processID}):`, xmlData);      
+      manager.apppend(xmlData + "\n")
+
       bodyBuf = bodyBuf.slice(header.size);
       headerBuf = null; // Reiniciar para el próximo encabezado
       if (bodyBuf.length >= 22) {
