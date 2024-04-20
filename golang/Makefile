@@ -10,6 +10,8 @@ producer:
 
 clean:
 	rm -f server producer
+	echo "" > ./logs/producer.log
+	echo "" > ./logs/server.log
 
 run_server: server
 	./server
