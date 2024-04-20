@@ -60,8 +60,8 @@ const sendXML = (xmlData: string, processID: number, conn: net.Socket) => {
   Buffer.from(message.header.uuid, 'utf-8').copy(headerBuf, 2);
   headerBuf.writeUInt32BE(message.header.processID, 18);
 
-  console.log('HEADER', headerBuf.length, buffer2string(headerBuf));
-  console.log('BODY', xmlBytes.length, buffer2string(xmlBytes));
+  console.log('send HEADER', headerBuf.length, buffer2string(headerBuf));
+  console.log('send BODY', xmlBytes.length, buffer2string(xmlBytes));
 
   conn.write(headerBuf);
   conn.write(xmlBytes);
