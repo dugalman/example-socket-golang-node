@@ -78,7 +78,9 @@ func main() {
 		// fmt.Println("Enviando Header body size ", message.Header.Size)
 		// fmt.Println("Enviando Header process ID", message.Header.ProcessID)
 		// fmt.Println("Enviando Header UUID      ", message.Header.Uuid)
-		fmt.Println("Enviando Header {", message.Header.Size, message.Header.Uuid.String(), message.Header.ProcessID, "}", message.Body)
+		// fmt.Println("Enviando Header {", message.Header.Size, message.Header.Uuid.String(), message.Header.ProcessID, "}")
+
+		fmt.Println("Enviado Body", message.Body)
 
 		// Convertir el tamaño del cuerpo a bytes y enviarlo como parte del encabezado
 		headerSize := binary.Size(message.Header)
@@ -94,11 +96,15 @@ func main() {
 		}
 
 		// Enviar el cuerpo (XML)
-		_, err = conn.Write([]byte(message.Body))
+		bodyBuf := []byte(message.Body)
+		_, err = conn.Write(bodyBuf)
 		if err != nil {
 			fmt.Println("Error al enviar el cuerpo:", err)
 			return
 		}
+
+		fmt.Println("SEND HEADER", binary.Size(headerBuf), headerBuf)
+		fmt.Println("SEND BODY", binary.Size(bodyBuf), bodyBuf)
 
 		fmt.Println("Mensaje enviado correctamente.")
 	}
