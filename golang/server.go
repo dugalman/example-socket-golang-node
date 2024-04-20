@@ -7,6 +7,8 @@ import (
 	"net"
 
 	"github.com/google/uuid"
+
+	utils "dugalman.com/paquetes-quebrados-example/utils"
 )
 
 const BUFFER_SIZE = 32
@@ -25,6 +27,8 @@ type TipoMensaje struct {
 }
 
 func main() {
+
+	// start server
 	ln, err := net.Listen("tcp", ":8080")
 	if err != nil {
 		fmt.Println("Error al iniciar el servidor:", err)
@@ -83,7 +87,7 @@ func handleConnection(conn net.Conn) {
 				return
 			}
 
-			fmt.Printf("    bodySize % 4d, BUFFER_SIZE % 4d, toRead % 4d, n % 4d, remaining % 4d | %v \n", len(body), BUFFER_SIZE, toRead, n, remaining, string(buf))
+			// fmt.Printf("    bodySize % 4d, BUFFER_SIZE % 4d, toRead % 4d, n % 4d, remaining % 4d | %v \n", len(body), BUFFER_SIZE, toRead, n, remaining, string(buf))
 
 			body = append(body, buf[:n]...)
 		}
@@ -93,6 +97,15 @@ func handleConnection(conn net.Conn) {
 		// fmt.Println("  XML recibido:", header.ProcessID, header.Uuid, ciclo, xmlData)
 		fmt.Println("  XML header:", header)
 		fmt.Println("  XML recibido:", xmlData)
+
+		// setup logging
+		manager, err := utils.NewFileManager("./logs/server.log")
+		if err != nil {
+			fmt.Println("Error:", err)
+			return
+		}
+		manager.Apppend(xmlData + "\n")
+
 	}
 }
 
